@@ -28,7 +28,7 @@ def get_num_periods(date_str, location):
             num_periods = 50
     return num_periods
 
-def seasonal_factor(date_str, amplitude=0.25):
+def seasonal_factor(date_str, amplitude=0.20):
     dt = datetime.strptime(date_str, "%Y-%m-%d").date()
     day_of_year = dt.timetuple().tm_yday
     theta = 2 * math.pi * (day_of_year - 1) / 365
@@ -42,8 +42,8 @@ def generate_prices(num_periods, date_str):
     for i in range(num_periods):
         peak_factor = math.sin((i / num_periods) * 2 * math.pi * 2) + 1
         daily_profile = 0.5 + 0.5 * peak_factor
-        weekend_factor = 0.9 if weekday >= 5 else 1.0
-        noise = random.uniform(-3, 3)
+        weekend_factor = 0.85 if weekday >= 5 else 1.0
+        noise = random.uniform(0.95, 1.05)
         price = base_price * season_mult * daily_profile * weekend_factor + noise
         prices.append(round(price, 2))
     return prices
